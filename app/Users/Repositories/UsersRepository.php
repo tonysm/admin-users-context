@@ -3,6 +3,7 @@
 namespace App\Users\Repositories;
 
 use App\Users\User;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 
 class UsersRepository
@@ -36,5 +37,10 @@ class UsersRepository
     public function findOrFail(int $userId) : User
     {
         return User::findOrFail($userId);
+    }
+
+    public function paginate() : Paginator
+    {
+        return User::paginate();
     }
 }

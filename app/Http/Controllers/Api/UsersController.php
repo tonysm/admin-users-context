@@ -11,6 +11,13 @@ use App\Http\Requests\Users\CreateUserRequest;
 
 class UsersController extends Controller
 {
+    public function index(Request $request, UsersContext $context)
+    {
+        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
+
+        return $context->listUsersPaginating();
+    }
+
     /**
      * Store a newly created resource in storage.
      *

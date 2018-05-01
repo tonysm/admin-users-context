@@ -131,4 +131,35 @@ class UsersTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
         $this->assertNotNull($user->fresh());
     }
+
+    public function testAdminsCanListUsers()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->getJson('/api/users');
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                [
+                    'id' => $admin->id,
+                ],
+                [
+                    'id' => $user->id,
+                ],
+            ],
+        ]);
+    }
+
+    public function testOnlyAdminsCanListUsers()
+    {
+        $nonAdmin = factory(User::class)->create();
+
+        $response = $this->actingAs($nonAdmin, 'api')
+            ->getJson('/api/users');
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
 }

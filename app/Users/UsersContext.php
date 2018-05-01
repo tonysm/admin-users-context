@@ -5,6 +5,7 @@ namespace App\Users;
 use App\Users\Repositories\UsersRepository;
 use App\Users\Repositories\GroupsRepository;
 use App\Exceptions\CannotDeleteGroupException;
+use Illuminate\Contracts\Pagination\Paginator;
 
 class UsersContext
 {
@@ -70,5 +71,10 @@ class UsersContext
     public function removeUserFromGroup(User $user, Group $group)
     {
         $this->groupsRepository->removeUser($group, $user);
+    }
+
+    public function listUsersPaginating() : Paginator
+    {
+        return $this->usersRepository->paginate();
     }
 }
