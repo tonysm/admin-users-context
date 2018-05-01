@@ -17,6 +17,8 @@ class UsersController extends Controller
      */
     public function store(Request $request)
     {
+        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
+
         $this->validate($request, [
             'name' => 'required|string|max:255',
         ]);
@@ -39,6 +41,8 @@ class UsersController extends Controller
      */
     public function destroy(Request $request, User $user)
     {
+        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
+
         $user->delete();
 
         return response()->json([], Response::HTTP_NO_CONTENT);

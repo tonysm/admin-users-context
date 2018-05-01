@@ -94,6 +94,20 @@ class UsersTest extends TestCase
         $this->assertCount(0, User::where('is_admin', false)->get());
     }
 
+    public function testOnlyAdminsCanCreateUsers()
+    {
+        $nonAdmin = factory(User::class)->create();
+
+        $response = $this->actingAs($nonAdmin, 'api')
+            ->postJson('/api/users', [
+                'name' => 'John Doe',
+            ]);
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        $this->assertCount(0, User::where('name', 'John Doe')->get());
+    }
+
     public function testDeletesUsers()
     {
         $admin = factory(User::class)->states(['admin'])->create();
@@ -104,5 +118,17 @@ class UsersTest extends TestCase
 
         $response->assertStatus(Response::HTTP_NO_CONTENT);
         $this->assertNull($user->fresh());
+    }
+
+    public function testOnlyAdminsCanDeleteUsers()
+    {
+        $nonAdmin = factory(User::class)->create();
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($nonAdmin, 'api')
+            ->deleteJson('/api/users/' . $user->id);
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertNotNull($user->fresh());
     }
 }
