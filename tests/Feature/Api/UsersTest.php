@@ -3,6 +3,7 @@
 namespace Tests\Feature\Api;
 
 use App\User;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
@@ -91,5 +92,17 @@ class UsersTest extends TestCase
         ]);
 
         $this->assertCount(0, User::where('is_admin', false)->get());
+    }
+
+    public function testDeletesUsers()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $user = factory(User::class)->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->deleteJson('/api/users/' . $user->id);
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $this->assertNull($user->fresh());
     }
 }

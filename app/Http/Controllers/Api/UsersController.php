@@ -29,4 +29,18 @@ class UsersController extends Controller
             'data' => $user,
         ], Response::HTTP_CREATED);
     }
+
+    /**
+     * @param Request $request
+     * @param User $user
+     *
+     * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
+     */
+    public function destroy(Request $request, User $user)
+    {
+        $user->delete();
+
+        return response()->json([], Response::HTTP_NO_CONTENT);
+    }
 }
