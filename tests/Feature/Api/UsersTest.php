@@ -35,12 +35,52 @@ class UsersTest extends TestCase
         $this->assertCount(1, User::where('name', 'John Doe')->get());
     }
 
-    public function testValidationFailsWhenSendingWrongDataToCreateUsers()
+    public function testCannotCreateUsersWithoutName()
     {
         $admin = factory(User::class)->states(['admin'])->create();
 
         $response = $this->actingAs($admin, 'api')
             ->postJson('/api/users', []);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'name',
+            ],
+        ]);
+
+        $this->assertCount(0, User::where('is_admin', false)->get());
+    }
+
+    public function testNamesAreStrings()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->postJson('/api/users', [
+                'name' => 123,
+            ]);
+
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'name',
+            ],
+        ]);
+
+        $this->assertCount(0, User::where('is_admin', false)->get());
+    }
+
+    public function testNamesLength()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->postJson('/api/users', [
+                'name' => str_random(256),
+            ]);
 
         $response->assertStatus(422);
         $response->assertJsonStructure([
