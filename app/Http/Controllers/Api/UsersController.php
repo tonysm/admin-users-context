@@ -4,25 +4,20 @@ namespace App\Http\Controllers\Api;
 
 use App\User;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Response;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\CreateUserRequest;
 
 class UsersController extends Controller
 {
     /**
      * Store a newly created resource in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\Users\CreateUserRequest  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CreateUserRequest $request)
     {
-        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
-
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-        ]);
-
         $user = User::create([
             'name' => $request->name,
         ]);
