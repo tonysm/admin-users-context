@@ -39,8 +39,8 @@ class UsersRepository
         return User::findOrFail($userId);
     }
 
-    public function paginate() : Paginator
+    public function listWithGroupsPaginated() : Paginator
     {
-        return User::paginate();
+        return User::with('groups')->paginate();
     }
 }

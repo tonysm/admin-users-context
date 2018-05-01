@@ -2,6 +2,7 @@
 
 namespace Tests\Feature\Api;
 
+use App\Users\Group;
 use App\Users\User;
 use Illuminate\Http\Response;
 use Tests\TestCase;
@@ -136,6 +137,8 @@ class UsersTest extends TestCase
     {
         $admin = factory(User::class)->states(['admin'])->create();
         $user = factory(User::class)->create();
+        $group = factory(Group::class)->create();
+        $group->users()->save($user);
 
         $response = $this->actingAs($admin, 'api')
             ->getJson('/api/users');
@@ -148,6 +151,9 @@ class UsersTest extends TestCase
                 ],
                 [
                     'id' => $user->id,
+                    'groups' => [
+                        [ 'id' => $group->id ],
+                    ],
                 ],
             ],
         ]);

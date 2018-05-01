@@ -74,9 +74,9 @@ class UsersContext
         $this->groupsRepository->removeUser($group, $user);
     }
 
-    public function listUsersPaginating() : Paginator
+    public function listUsersWithGroupsPaginated() : Paginator
     {
-        return $this->usersRepository->paginate();
+        return $this->usersRepository->listWithGroupsPaginated();
     }
 
     public function listAllGroups() : Collection

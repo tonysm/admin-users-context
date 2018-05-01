@@ -15,7 +15,7 @@ class UsersController extends Controller
     {
         abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
 
-        return $context->listUsersPaginating();
+        return $context->listUsersWithGroupsPaginated();
     }
 
     /**
