@@ -32,6 +32,7 @@ class GroupsController extends Controller
      * @param UsersContext $context
      *
      * @return \Illuminate\Http\JsonResponse
+     * @throws \Exception
      */
     public function destroy(Request $request, Group $group, UsersContext $context)
     {

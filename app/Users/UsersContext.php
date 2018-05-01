@@ -31,6 +31,11 @@ class UsersContext
         return $this->usersRepository->create($name);
     }
 
+    /**
+     * @param User $user
+     *
+     * @throws \Exception
+     */
     public function deleteUser(User $user)
     {
         $this->usersRepository->delete($user);
@@ -41,6 +46,11 @@ class UsersContext
         return $this->groupsRepository->create($name);
     }
 
+    /**
+     * @param Group $group
+     *
+     * @throws \Exception
+     */
     public function deleteGroup(Group $group)
     {
         if ($this->groupsRepository->hasUsers($group)) {
