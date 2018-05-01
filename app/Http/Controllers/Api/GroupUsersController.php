@@ -13,6 +13,8 @@ class GroupUsersController extends Controller
 {
     public function store(Request $request, Group $group)
     {
+        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
+        
         $this->validate($request, [
             'user_id' => [
                 Rule::unique('group_user', 'user_id')

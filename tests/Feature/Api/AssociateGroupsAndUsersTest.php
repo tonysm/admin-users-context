@@ -52,4 +52,20 @@ class AssociateGroupsAndUsersTest extends TestCase
         $this->assertCount(1, $group->refresh()->users);
         $this->assertTrue($group->users->first()->is($user));
     }
+
+    public function testOnlyAdminsCanAssociateUsersFromGroups()
+    {
+        $nonAdmin = factory(User::class)->create();
+        $user = factory(User::class)->create();
+        $group = factory(Group::class)->create();
+
+        $response = $this->actingAs($nonAdmin, 'api')
+            ->postJson('/api/groups/' . $group->id . '/users', [
+                'user_id' => $user->id,
+            ]);
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        $this->assertCount(0, $group->refresh()->users);
+    }
 }
