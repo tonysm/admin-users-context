@@ -7,6 +7,7 @@ use App\Users\UsersContext;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Resources\Users\UserResource;
 use App\Http\Requests\Users\CreateUserRequest;
 
 class UsersController extends Controller
@@ -15,7 +16,7 @@ class UsersController extends Controller
     {
         abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
 
-        return $context->listUsersWithGroupsPaginated();
+        return UserResource::collection($context->listUsersWithGroupsPaginated());
     }
 
     /**
@@ -24,15 +25,13 @@ class UsersController extends Controller
      * @param \App\Http\Requests\Users\CreateUserRequest $request
      * @param \App\Users\UsersContext $context
      *
-     * @return \Illuminate\Http\Response
+     * @return UserResource
      */
     public function store(CreateUserRequest $request, UsersContext $context)
     {
         $user = $context->createUser($request->name);
 
-        return response()->json([
-            'data' => $user,
-        ], Response::HTTP_CREATED);
+        return new UserResource($user);
     }
 
     /**

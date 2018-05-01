@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Http\Resources\Users\GroupResource;
 use App\Users\Group;
 use App\Users\UsersContext;
 use Illuminate\Http\Request;
@@ -15,24 +16,20 @@ class GroupsController extends Controller
     {
         abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
 
-        return [
-            'data' => $context->listAllGroups(),
-        ];
+        return GroupResource::collection($context->listAllGroups());
     }
 
     /**
      * @param CreateGroupRequest $request
      * @param UsersContext $context
      *
-     * @return \Illuminate\Http\JsonResponse
+     * @return GroupResource
      */
     public function store(CreateGroupRequest $request, UsersContext $context)
     {
         $group = $context->createGroup($request->name);
 
-        return response()->json([
-            'data' => $group,
-        ], Response::HTTP_CREATED);
+        return new GroupResource($group);
     }
 
     /**
