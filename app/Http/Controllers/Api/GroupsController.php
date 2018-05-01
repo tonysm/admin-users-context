@@ -3,24 +3,23 @@
 namespace App\Http\Controllers\Api;
 
 use App\Users\Group;
+use App\Users\UsersContext;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
-use App\Exceptions\CannotDeleteGroupException;
 use App\Http\Requests\Users\CreateGroupRequest;
 
 class GroupsController extends Controller
 {
     /**
      * @param CreateGroupRequest $request
+     * @param UsersContext $context
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(CreateGroupRequest $request)
+    public function store(CreateGroupRequest $request, UsersContext $context)
     {
-        $group = Group::create([
-            'name' => $request->name,
-        ]);
+        $group = $context->createGroup($request->name);
 
         return response()->json([
             'data' => $group,
@@ -30,19 +29,15 @@ class GroupsController extends Controller
     /**
      * @param Request $request
      * @param Group $group
+     * @param UsersContext $context
      *
      * @return \Illuminate\Http\JsonResponse
-     * @throws \Exception
      */
-    public function destroy(Request $request, Group $group)
+    public function destroy(Request $request, Group $group, UsersContext $context)
     {
         abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
 
-        if ($group->users()->count() > 0) {
-            throw new CannotDeleteGroupException($group);
-        }
-
-        $group->delete();
+        $context->deleteGroup($group);
 
         return response()->json([], Response::HTTP_NO_CONTENT);
     }
