@@ -2,8 +2,8 @@
 
 namespace Tests\Feature\Api;
 
-use App\User;
-use App\Group;
+use App\Users\User;
+use App\Users\Group;
 use Tests\TestCase;
 use Illuminate\Http\Response;
 use Illuminate\Foundation\Testing\RefreshDatabase;

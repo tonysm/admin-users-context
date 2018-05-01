@@ -2,7 +2,7 @@
 
 namespace App\Exceptions;
 
-use App\Group;
+use App\Users\Group;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 

@@ -2,7 +2,7 @@
 
 namespace Tests\Feature\Api;
 
-use App\User;
+use App\Users\User;
 use Illuminate\Http\Response;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\RefreshDatabase;
