@@ -3,20 +3,19 @@
 namespace App\Http\Controllers\Api;
 
 use App\Group;
-use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Users\CreateGroupRequest;
 
 class GroupsController extends Controller
 {
-    public function store(Request $request)
+    /**
+     * @param CreateGroupRequest $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function store(CreateGroupRequest $request)
     {
-        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
-
-        $this->validate($request, [
-            'name' => 'required|string|max:255',
-        ]);
-
         $group = Group::create([
             'name' => $request->name,
         ]);
