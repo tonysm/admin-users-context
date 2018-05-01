@@ -68,4 +68,65 @@ class AssociateGroupsAndUsersTest extends TestCase
 
         $this->assertCount(0, $group->refresh()->users);
     }
+
+    public function testValidatesUserIdField()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $group = factory(Group::class)->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->postJson('/api/groups/' . $group->id . '/users', [
+                'user_id' => 'something',
+            ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'user_id',
+            ],
+        ]);
+
+        $this->assertCount(0, $group->refresh()->users);
+    }
+
+    public function testValidateUserIdIsRequired()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $group = factory(Group::class)->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->postJson('/api/groups/' . $group->id . '/users', []);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'user_id',
+            ],
+        ]);
+
+        $this->assertCount(0, $group->refresh()->users);
+    }
+
+    public function testValidateUserDoesNotExist()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $group = factory(Group::class)->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->postJson('/api/groups/' . $group->id . '/users', [
+                'user_id' => 42,
+            ]);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'user_id',
+            ],
+        ]);
+
+        $this->assertCount(0, $group->refresh()->users);
+    }
 }

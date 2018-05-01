@@ -14,11 +14,14 @@ class GroupUsersController extends Controller
     public function store(Request $request, Group $group)
     {
         abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
-        
+
         $this->validate($request, [
             'user_id' => [
+                'required',
                 Rule::unique('group_user', 'user_id')
-                    ->where('group_id', $group->id)
+                    ->where('group_id', $group->id),
+                'numeric',
+                Rule::exists('users', 'id'),
             ],
         ]);
 
