@@ -4,6 +4,7 @@ namespace App\Users\Repositories;
 
 use App\Users\User;
 use App\Users\Group;
+use Illuminate\Database\Eloquent\Collection;
 
 class GroupsRepository
 {
@@ -53,5 +54,10 @@ class GroupsRepository
     public function removeUser(Group $group, User $user)
     {
         $group->users()->detach($user);
+    }
+
+    public function listAll(): Collection
+    {
+        return Group::all();
     }
 }

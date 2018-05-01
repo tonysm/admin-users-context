@@ -4,6 +4,7 @@ namespace App\Users;
 
 use App\Users\Repositories\UsersRepository;
 use App\Users\Repositories\GroupsRepository;
+use Illuminate\Database\Eloquent\Collection;
 use App\Exceptions\CannotDeleteGroupException;
 use Illuminate\Contracts\Pagination\Paginator;
 
@@ -76,5 +77,10 @@ class UsersContext
     public function listUsersPaginating() : Paginator
     {
         return $this->usersRepository->paginate();
+    }
+
+    public function listAllGroups() : Collection
+    {
+        return $this->groupsRepository->listAll();
     }
 }

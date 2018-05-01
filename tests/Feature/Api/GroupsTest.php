@@ -132,4 +132,30 @@ class GroupsTest extends TestCase
         $response->assertStatus(Response::HTTP_FORBIDDEN);
         $this->assertNotNull($group->fresh());
     }
+
+    public function testAdminCanListGroups()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $group = factory(Group::class)->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->getJson('/api/groups');
+
+        $response->assertStatus(200);
+        $response->assertJson([
+            'data' => [
+                [ 'id' => $group->id, 'name' => $group->name ],
+            ],
+        ]);
+    }
+
+    public function testOnlyAdminsCanListGroups()
+    {
+        $nonAdmin = factory(User::class)->create();
+
+        $response = $this->actingAs($nonAdmin, 'api')
+            ->getJson('/api/groups');
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+    }
 }

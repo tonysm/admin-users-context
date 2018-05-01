@@ -11,6 +11,15 @@ use App\Http\Requests\Users\CreateGroupRequest;
 
 class GroupsController extends Controller
 {
+    public function index(Request $request, UsersContext $context)
+    {
+        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
+
+        return [
+            'data' => $context->listAllGroups(),
+        ];
+    }
+
     /**
      * @param CreateGroupRequest $request
      * @param UsersContext $context
