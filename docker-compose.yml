@@ -1,0 +1,44 @@
+version: '2'
+
+services:
+    app:
+        image: tonysm/admin-users-app
+        build:
+            dockerfile: ./resources/docker/app/Dockerfile
+            context: .
+        depends_on:
+          - db
+        environment:
+            APP_ENV: local
+            CONTAINER_ROLE: app
+            CACHE_DRIVER: file
+            SESSION_DRIVER: file
+            QUEUE_DRIVER: sync
+            DB_HOST: db
+        volumes:
+            - .:/var/www/html
+        ports:
+            - "80:80"
+        networks:
+            - front
+            - back
+    db:
+        image: mysql:5.7
+        volumes:
+            - mysqldata:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: "${DB_PASSWORD}"
+            MYSQL_DATABASE: "${DB_DATABASE}"
+            MYSQL_USER: "${DB_USERNAME}"
+            MYSQL_PASSWORD: "${DB_PASSWORD}"
+        networks:
+            - back
+networks:
+    back:
+        driver: "bridge"
+    front:
+        driver: "bridge"
+
+volumes:
+    mysqldata:
+        driver: "local"
