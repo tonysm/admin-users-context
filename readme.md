@@ -19,7 +19,7 @@ You will need Docker and docker-compose tools to run this example.
     - Run `yarn && yarn dev`
 - Load the application in the browser at [http://localhost](http://localhost). You can use these credentials to authenticate 
     - Email: `admin@example.com`
-    - Pass: `testing`
+    - Pass: `secret`
 - Generate the API documentation (TODO):
     - Run `composer generate:api-docs`
     - Access [http://localhost/api/docs](http://localhost/api/docs)
