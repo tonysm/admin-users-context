@@ -57,5 +57,33 @@ export default {
                     page: 1,
                 });
             });
+    },
+    [Constants.ADD_USER_TO_GROUP] ({commit, dispatch, state}, {user, groups}) {
+        commit(Constants.SAVING_ASSOCIATION);
+
+        const userGroups = user.groups.map(group => group.id);
+        const newGroups = groups.filter(groupId => !userGroups.includes(groupId));
+        const removedGroups = userGroups.filter(groupId => !groups.includes(groupId));
+
+        const newGroupsPromises = newGroups.map((groupId) => {
+            return axios.post(`/api/groups/${groupId}/users`, {
+                user_id: user.id,
+            });
+        });
+
+        const removeGroupsPromises = removedGroups.map((groupId) => {
+            return axios.delete(`/api/groups/${groupId}/users/${user.id}`);
+        });
+
+        return Promise.all(newGroupsPromises.concat(removeGroupsPromises))
+            .then(() => {
+                    dispatch({
+                        type: Constants.LOAD_USERS,
+                        page: state.users.page,
+                    })
+                    .then(() => {
+                        commit(Constants.ASSOCIATIONS_SAVED)
+                    });
+            });
     }
 }

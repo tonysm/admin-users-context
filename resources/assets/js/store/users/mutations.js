@@ -17,4 +17,10 @@ export default {
     [Constants.GROUP_CREATED] (state, {group}) {
         state.groups.push(group);
     },
+    [Constants.SAVING_ASSOCIATION] (state) {
+        state.status = Constants.STATUS_SAVING;
+    },
+    [Constants.ASSOCIATIONS_SAVED] (state) {
+        state.status = Constants.STATUS_DONE;
+    }
 }

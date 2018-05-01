@@ -18,12 +18,7 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr v-for="user in users.items" :key="user.id">
-                    <td>{{ user.name }}</td>
-                    <td>{{ user.is_admin ? 'Admin' : 'Member' }}</td>
-                    <td v-if="user.groups.length > 0">{{ user.groups.map(g => g.name).join(', ') }}</td>
-                    <td v-else>No groups.</td>
-                </tr>
+                    <user-row v-for="user in users.items" :user="user" :groups="groups" :key="user.id"></user-row>
                 </tbody>
             </table>
         </div>
@@ -56,11 +51,15 @@
 
 <script>
     import Vue from 'vue';
+    import UserRow from './UserRow.vue';
     import {mapState, mapActions} from 'vuex';
     import * as Constants from '../store/users/constants';
 
     export default {
         name: "UsersList",
+        components: {
+            UserRow,
+        },
         data () {
             return {
                 newUser: {
