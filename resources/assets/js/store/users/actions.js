@@ -19,9 +19,9 @@ export default {
                     type: Constants.USERS_LOADED,
                     users: data.data,
                     page,
-                    last_page: data.last_page,
-                    per_page: data.per_page,
-                    total: data.total,
+                    last_page: data.meta.last_page,
+                    per_page: data.meta.per_page,
+                    total: data.meta.total,
                 });
             });
     },
