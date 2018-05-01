@@ -7,6 +7,12 @@
 
 import './bootstrap';
 import Vue from 'vue';
+import BootstrapVue from 'bootstrap-vue';
+
+import 'bootstrap/dist/css/bootstrap.css';
+import 'bootstrap-vue/dist/bootstrap-vue.css';
+
+Vue.use(BootstrapVue);
 
 import store from './store';
 import { BOOT_USERS_MODULE } from "./store/users/constants";

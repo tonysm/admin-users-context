@@ -14,4 +14,7 @@ export default {
     [Constants.USERS_MODULE_BOOTED] (state) {
         state.status = Constants.STATUS_DONE;
     },
+    [Constants.GROUP_CREATED] (state, {group}) {
+        state.groups.push(group);
+    },
 }

@@ -28,7 +28,22 @@ export default {
     [Constants.LOAD_GROUPS] ({commit}) {
         return axios.get('/api/groups')
             .then(({data}) => {
-                console.log(data);
+                commit({
+                    type: Constants.GROUPS_LOADED,
+                    groups: data.data,
+                });
             });
     },
+    [Constants.CREATE_GROUP] ({commit}, {name}) {
+        return axios
+            .post('/api/groups', {
+                name,
+            })
+            .then(({data}) => {
+                commit({
+                    type: Constants.GROUP_CREATED,
+                    group: data.data,
+                });
+            });
+    }
 }
