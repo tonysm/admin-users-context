@@ -13,6 +13,10 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
+Route::middleware('auth:api')->namespace('Api')->group(function ($router) {
+    $router->get('/user', function (Request $request) {
+        return $request->user();
+    });
+
+    $router->resource('users', 'UsersController')->only(['store']);
 });
