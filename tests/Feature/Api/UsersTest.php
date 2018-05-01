@@ -12,7 +12,6 @@ class UsersTest extends TestCase
 
     public function testAdminCanCreateUsers()
     {
-        $this->withoutExceptionHandling();
         $admin = factory(User::class)->states(['admin'])->create();
 
         $response = $this->actingAs($admin, 'api')
@@ -26,17 +25,31 @@ class UsersTest extends TestCase
                 'name' => 'John Doe',
             ],
         ]);
+        $response->assertJsonStructure([
+            'data' => [
+                'id',
+                'name',
+            ],
+        ]);
 
         $this->assertCount(1, User::where('name', 'John Doe')->get());
     }
 
-    public function xtestValidationFailsWhenSendingWrongDataToCreateUsers()
+    public function testValidationFailsWhenSendingWrongDataToCreateUsers()
     {
-        
-    }
+        $admin = factory(User::class)->states(['admin'])->create();
 
-    public function xtestCannotDuplicateUsersEmails()
-    {
+        $response = $this->actingAs($admin, 'api')
+            ->postJson('/api/users', []);
 
+        $response->assertStatus(422);
+        $response->assertJsonStructure([
+            'message',
+            'errors' => [
+                'name',
+            ],
+        ]);
+
+        $this->assertCount(0, User::where('is_admin', false)->get());
     }
 }
