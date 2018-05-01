@@ -11,6 +11,12 @@ class GroupsController extends Controller
 {
     public function store(Request $request)
     {
+        abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
+
+        $this->validate($request, [
+            'name' => 'required|string|max:255',
+        ]);
+
         $group = Group::create([
             'name' => $request->name,
         ]);
