@@ -4,10 +4,18 @@ This application is a demo. I'm using context based modules, approach that I too
 
 ## Installation
 
-You will need Docker and docker-compose tools to run this example.
+To run the demo locally, you will need:
+
+- Docker;
+- docker-compose;
+- PHP +7.2 & Composer;
+- Node & yarn;
+
+With those, you can proceed to the steps bellow:
 
 - Clone this repo
 - Run `cp .env.example .env`
+- Run `composer install`
 - Run `docker-compose up -d`
 - Run `docker-compose exec app bash` to get a shell inside the application container and run the migrations and passport install commands on it:
     - Run `php artisan key:generate` (for local env only)
@@ -23,7 +31,14 @@ You will need Docker and docker-compose tools to run this example.
 - Generate the API documentation (TODO):
     - Run `composer generate:api-docs`
     - Access [http://localhost/api/docs](http://localhost/api/docs)
-    
+
+### Troubleshooting
+
+If you have problems with permission when loading the application, make sure you follow the steps:
+
+- Run `chown -R $(id -u):www-data ./storage` (to change the ownership of files in the storage folder)
+- Run `chmod -R ug+rw ./storage` (to allow user and group to read and write in the storage folder)
+
 ## Documentation
 
 - You can find some Sequence Diagrams [here](./resources/docs/images)
