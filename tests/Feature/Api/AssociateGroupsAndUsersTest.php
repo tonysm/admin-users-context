@@ -129,4 +129,37 @@ class AssociateGroupsAndUsersTest extends TestCase
 
         $this->assertCount(0, $group->refresh()->users);
     }
+
+    public function testAdminsCanRemoveUsersFromGroups()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $user = factory(User::class)->create();
+        $group = factory(Group::class)->create();
+
+        $group->users()->save($user);
+
+        $response = $this->actingAs($admin, 'api')
+            ->deleteJson('/api/groups/' . $group->id . '/users/' . $user->id);
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+
+        $this->assertCount(0, $group->refresh()->users);
+        $this->assertNotNull($user->refresh());
+    }
+
+    public function testOnlyAdminsCanRemoveAssociation()
+    {
+        $nonAdmin = factory(User::class)->create();
+        $user = factory(User::class)->create();
+        $group = factory(Group::class)->create();
+
+        $group->users()->save($user);
+
+        $response = $this->actingAs($nonAdmin, 'api')
+            ->deleteJson('/api/groups/' . $group->id . '/users/' . $user->id);
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+
+        $this->assertCount(1, $group->refresh()->users);
+    }
 }

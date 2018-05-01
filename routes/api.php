@@ -20,5 +20,5 @@ Route::middleware('auth:api')->namespace('Api')->group(function ($router) {
 
     $router->resource('users', 'UsersController')->only(['store', 'destroy']);
     $router->resource('groups', 'GroupsController')->only(['store']);
-    $router->resource('groups.users', 'GroupUsersController')->only(['store']);
+    $router->resource('groups.users', 'GroupUsersController')->only(['store', 'destroy']);
 });
