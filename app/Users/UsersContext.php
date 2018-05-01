@@ -49,4 +49,16 @@ class UsersContext
 
         $this->groupsRepository->delete($group);
     }
+
+    public function addUserToGroup(int $userId, Group $group)
+    {
+        $user = $this->usersRepository->findOrFail($userId);
+
+        $this->groupsRepository->addUser($group, $user);
+    }
+
+    public function removeUserFromGroup(User $user, Group $group)
+    {
+        $this->groupsRepository->removeUser($group, $user);
+    }
 }

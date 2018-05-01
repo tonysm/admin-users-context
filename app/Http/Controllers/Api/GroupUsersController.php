@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Users\User;
 use App\Users\Group;
+use App\Users\UsersContext;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
@@ -14,14 +15,13 @@ class GroupUsersController extends Controller
     /**
      * @param AssociateUsersToGroupsRequest $request
      * @param Group $group
+     * @param UsersContext $context
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function store(AssociateUsersToGroupsRequest $request, Group $group)
+    public function store(AssociateUsersToGroupsRequest $request, Group $group, UsersContext $context)
     {
-        $user = User::findOrFail($request->user_id);
-
-        $group->users()->save($user);
+        $context->addUserToGroup($request->user_id, $group);
 
         return response()->json([], Response::HTTP_OK);
     }
@@ -30,14 +30,15 @@ class GroupUsersController extends Controller
      * @param Request $request
      * @param Group $group
      * @param User $user
+     * @param UsersContext $context
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy(Request $request, Group $group, User $user)
+    public function destroy(Request $request, Group $group, User $user, UsersContext $context)
     {
         abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);
 
-        $group->users()->detach($user);
+        $context->removeUserFromGroup($user, $group);
 
         return response()->json([], Response::HTTP_NO_CONTENT);
     }

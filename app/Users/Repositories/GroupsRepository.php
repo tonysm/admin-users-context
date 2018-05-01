@@ -2,6 +2,7 @@
 
 namespace App\Users\Repositories;
 
+use App\Users\User;
 use App\Users\Group;
 
 class GroupsRepository
@@ -19,5 +20,15 @@ class GroupsRepository
     public function delete(Group $group)
     {
         $group->delete();
+    }
+
+    public function addUser(Group $group, User $user)
+    {
+        $group->users()->save($user);
+    }
+
+    public function removeUser(Group $group, User $user)
+    {
+        $group->users()->detach($user);
     }
 }

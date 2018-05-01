@@ -97,4 +97,21 @@ class UsersContextTest extends TestCase
 
         $this->context->deleteGroup($group);
     }
+
+    public function testCannotDuplicateUserGroupAssociation()
+    {
+        $userId = 42;
+        $user = new User();
+        $group = new Group();
+
+        $this->usersRepo->shouldReceive('findOrFail')
+            ->with($userId)
+            ->andReturn($user);
+
+        $this->groupsRepo->shouldReceive('addUser')
+            ->with($group, $user)
+            ->once();
+
+        $this->context->addUserToGroup($userId, $group);
+    }
 }
