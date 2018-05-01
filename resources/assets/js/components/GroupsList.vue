@@ -94,7 +94,7 @@
                         this.$refs.modal.hide();
                     })
                     .catch((error) => {
-                        this.errors = error.response.data.errors;ss
+                        this.errors = error.response.data.errors;
                     })
             },
             clearErrors(field) {

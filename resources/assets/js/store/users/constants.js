@@ -2,6 +2,7 @@ export const LOAD_USERS = 'users/LOAD_USERS';
 export const LOAD_GROUPS = 'users/LOAD_GROUPS';
 export const BOOT_USERS_MODULE = 'users/BOOT';
 export const CREATE_GROUP = 'users/CREATE_GROUP';
+export const CREATE_USER = 'users/CREATE_USER';
 
 export const GROUP_CREATED = 'users/GROUP_CREATED';
 export const USERS_MODULE_BOOTED = 'users/BOOTED';

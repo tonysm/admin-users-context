@@ -45,5 +45,17 @@ export default {
                     group: data.data,
                 });
             });
+    },
+    [Constants.CREATE_USER] ({dispatch}, {name}) {
+        return axios
+            .post('/api/users', {
+                name,
+            })
+            .then(({data}) => {
+                dispatch({
+                    type: Constants.LOAD_USERS,
+                    page: 1,
+                });
+            });
     }
 }
