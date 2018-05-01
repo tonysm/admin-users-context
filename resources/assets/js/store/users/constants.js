@@ -7,4 +7,5 @@ export const USERS_LOADED = 'users/USERS_LOADED';
 export const GROUPS_LOADED = 'users/GROUPS_LOADED';
 
 export const STATUS_LOADING = 'users/LOADING';
+export const STATUS_SAVING = 'users/SAVING';
 export const STATUS_DONE = 'users/DONE';

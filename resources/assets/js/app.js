@@ -10,9 +10,9 @@ import Vue from 'vue';
 
 import store from './store';
 import { BOOT_USERS_MODULE } from "./store/users/constants";
-import ExampleComponent from './components/ExampleComponent.vue';
+import UsersComponent from './components/UsersComponent.vue';
 
-Vue.component('example-component', ExampleComponent);
+Vue.component('users-component', UsersComponent);
 
 const app = new Vue({
     el: '#app',
