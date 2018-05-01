@@ -91,4 +91,45 @@ class GroupsTest extends TestCase
 
         $this->assertCount(0, Group::all());
     }
+
+    public function testAdminsCannotDeleteGroupsWhenTheyHaveUsersAssociated()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $user = factory(User::class)->create();
+        $group = factory(Group::class)->create();
+
+        $group->users()->save($user);
+
+        $response = $this->actingAs($admin, 'api')
+            ->deleteJson('/api/groups/' . $group->id);
+
+        $response->assertStatus(Response::HTTP_UNPROCESSABLE_ENTITY);
+        $response->assertJsonStructure([
+            'message',
+        ]);
+    }
+
+    public function testAdminsCanRemoveGroupsWhenNoUsersAreAssociated()
+    {
+        $admin = factory(User::class)->states(['admin'])->create();
+        $group = factory(Group::class)->create();
+
+        $response = $this->actingAs($admin, 'api')
+            ->deleteJson('/api/groups/' . $group->id);
+
+        $response->assertStatus(Response::HTTP_NO_CONTENT);
+        $this->assertNull($group->fresh());
+    }
+
+    public function testOnlyAdminsCanDeleteGroups()
+    {
+        $nonAdmin = factory(User::class)->create();
+        $group = factory(Group::class)->create();
+
+        $response = $this->actingAs($nonAdmin, 'api')
+            ->deleteJson('/api/groups/' . $group->id);
+
+        $response->assertStatus(Response::HTTP_FORBIDDEN);
+        $this->assertNotNull($group->fresh());
+    }
 }
