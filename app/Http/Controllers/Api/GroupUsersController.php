@@ -11,6 +11,12 @@ use App\Http\Requests\Users\AssociateUsersToGroupsRequest;
 
 class GroupUsersController extends Controller
 {
+    /**
+     * @param AssociateUsersToGroupsRequest $request
+     * @param Group $group
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function store(AssociateUsersToGroupsRequest $request, Group $group)
     {
         $user = User::findOrFail($request->user_id);
@@ -20,6 +26,13 @@ class GroupUsersController extends Controller
         return response()->json([], Response::HTTP_OK);
     }
 
+    /**
+     * @param Request $request
+     * @param Group $group
+     * @param User $user
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function destroy(Request $request, Group $group, User $user)
     {
         abort_unless($request->user()->is_admin, Response::HTTP_FORBIDDEN);

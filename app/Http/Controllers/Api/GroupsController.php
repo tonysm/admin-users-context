@@ -2,13 +2,12 @@
 
 namespace App\Http\Controllers\Api;
 
-use App\Exceptions\CannotDeleteGroupException;
 use App\Group;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Http\Controllers\Controller;
+use App\Exceptions\CannotDeleteGroupException;
 use App\Http\Requests\Users\CreateGroupRequest;
-use Illuminate\Validation\Rule;
 
 class GroupsController extends Controller
 {
