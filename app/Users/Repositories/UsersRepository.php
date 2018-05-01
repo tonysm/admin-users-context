@@ -8,10 +8,11 @@ class UsersRepository
 {
     public function create(string $name) : User
     {
-
+        return User::create(['name' => $name]);
     }
 
     public function delete(User $user)
     {
+        $user->delete();
     }
 }
