@@ -45,4 +45,15 @@ class UsersContextTest extends TestCase
 
         $this->assertInstanceOf(User::class, $user);
     }
+
+    public function testDeletesUsers()
+    {
+        $model = new User();
+
+        $this->usersRepo->shouldReceive('delete')
+            ->with($model)
+            ->once();
+
+        $this->context->deleteUser($model);
+    }
 }

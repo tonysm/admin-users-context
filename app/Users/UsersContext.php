@@ -29,4 +29,9 @@ class UsersContext
     {
         return $this->usersRepository->create($name);
     }
+
+    public function deleteUser(User $user)
+    {
+        $this->usersRepository->delete($user);
+    }
 }

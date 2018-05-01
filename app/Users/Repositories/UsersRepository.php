@@ -10,4 +10,8 @@ class UsersRepository
     {
 
     }
+
+    public function delete(User $user)
+    {
+    }
 }
