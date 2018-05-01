@@ -23,3 +23,8 @@ You will need Docker and docker-compose tools to run this example.
 - Generate the API documentation (TODO):
     - Run `composer generate:api-docs`
     - Access [http://localhost/api/docs](http://localhost/api/docs)
+    
+## Documentation
+
+- You can find some Sequence Diagrams [here](./resources/docs/images)
+- The ER model also can be found [here](./resources/docs/images/er-model.png)
